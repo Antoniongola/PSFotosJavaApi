@@ -12,11 +12,11 @@ public class PsFotosApplication {
 
     public static void main(String[] args) throws DbxException {
         SpringApplication.run(PsFotosApplication.class, args);
-
-        DropboxService dropbox = new DropboxService();
-        dropbox.imprimirDadosDaConta();
+        //DropboxService dropbox = new DropboxService();
+        //dropbox.imprimirDadosDaConta();
 
         //dropbox.carregarImagem(new Photo());
         //dropbox.newDropBoxFolder("ola mundo");
+
     }
 }
