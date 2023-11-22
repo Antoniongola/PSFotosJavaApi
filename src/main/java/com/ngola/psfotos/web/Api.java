@@ -53,12 +53,11 @@ public class Api {
     }
 
     @PostMapping(path="/users/{username}/albums/{albumId}/photos/add")
-    public Photo adicionarFoto(@RequestBody String nomeDaFoto, @PathVariable long albumId) throws DbxException {
+    public Photo adicionarFoto(@RequestBody PhotoDto photoDto, @PathVariable long albumId, String uri) throws DbxException {
         Album album = this.albumService.verAlbum(albumId);
         Photo photo = new Photo();
-        photo.setNome(nomeDaFoto);
+        photo.setNome(photoDto.getNomeFoto());
         photo.setAlbumFk(album);
-        this.photoService.addPhoto(photo);
         return photo;
     }
 
@@ -160,13 +159,22 @@ public class Api {
     }
 
     @PostMapping(path = "/users/{username}/search")
-    public List<User> pesquisarUsers(@PathVariable String username, @RequestBody String user){
-        List<User> userList = this.userService.pesquisarUser(user);
-        User lista[] = new User[userList.size()];
+    public List<User> pesquisarUsers(@PathVariable String username, @RequestBody PesquisaDto user){
+        List<User> userList = this.selecionarTodos();
+
         int i =  0;
         for(User utilizador : userList){
-            if(!utilizador.getUserName().equals(username))
+            if(utilizador.getUserName().contains(user.getNomeUser()) && !utilizador.getUserName().equalsIgnoreCase(username))
+                i++;
+        }
+        User lista[] = new User[i];
+
+        i=0;
+        for(User utilizador : userList){
+            if(utilizador.getUserName().contains(user.getNomeUser()) && !utilizador.getUserName().equalsIgnoreCase(username)) {
                 lista[i] = utilizador;
+                i++;
+            }
         }
 
         return Arrays.asList(lista);
