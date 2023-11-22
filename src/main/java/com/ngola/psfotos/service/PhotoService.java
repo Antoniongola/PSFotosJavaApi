@@ -6,6 +6,7 @@ import com.ngola.psfotos.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -18,9 +19,10 @@ public class PhotoService implements IPhotoService{
     private DropboxService dropboxService;
 
     @Override
-    public Photo addPhoto(Photo photo) throws DbxException {
-        if(this.dropboxService.carregarImagem(photo))
-            return this.photoRepository.save(photo);
+    public Photo addPhoto(String uri, Photo photo) throws DbxException, IOException {
+        if(dropboxService.guardarImagemNoPc(uri, photo))
+            if(dropboxService.carregarImagem(uri, photo))
+                return this.photoRepository.save(photo);
 
         return null;
     }
