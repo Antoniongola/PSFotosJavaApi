@@ -1,5 +1,8 @@
 package com.ngola.psfotos.model;
 
-public class PhotoDto {
+import lombok.Data;
 
+@Data
+public class PhotoDto {
+    private String nomeFoto;
 }
